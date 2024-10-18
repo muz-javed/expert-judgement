@@ -1581,7 +1581,7 @@ def show_ahp_weight(team, df):
     unsafe_allow_html=True,
     )
 
-    main_cols = st.columns([1, 5, 1])
+    main_cols = st.columns([1, 8, 1])
 
     with main_cols[1]:
         st.markdown(f'<p class="big-font">Verify Weights</p>', unsafe_allow_html=True)
