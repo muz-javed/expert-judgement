@@ -1661,145 +1661,146 @@ def user_sidebar():
 
 
 def pending_page_users():
-
-    st.markdown(f"""
-    <div style="border-radius: 5px;">
-        <h2 style="text-align:left; color: black; font-weight: bold;">Responses</h2>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    user_sidebar()
-
-    roles = pd.read_excel('Roles.xlsx')
-    assigned_forms = pd.read_excel('assign_forms.xlsx')
-
-    temp_roles = roles[roles['Email ID'] == st.session_state.email].reset_index(drop = True)
-    temp_quest = temp_roles[['Questionnaire', 'Reviewer']].drop_duplicates().reset_index(drop = True)
-    temp_quest['tabs'] = temp_quest['Questionnaire'] + '-' + temp_quest['Reviewer']
-
-    temp_assigned = assigned_forms[assigned_forms['user'] == st.session_state.email].reset_index(drop = True)
-
-    # st.write(temp_assigned)
-
-    role_tabs = []
-    for i in range(0, len(temp_quest)):
-        if temp_quest['tabs'][i] == 'AHP-No':
-            role_tabs.append('AHP Questionnaire')
-        elif temp_quest['tabs'][i] == 'Delphi-No':
-            role_tabs.append('Delphi Questionnaire')
-        else:
-            role_tabs.append('Delphi Questionnaire')
-            role_tabs.append('Delphi Verification')
-    sorted_role_tabs = sorted(set(role_tabs))
-    # st.write(sorted_role_tabs)
-
-    for i in range(0, len(sorted_role_tabs)):
-        if sorted_role_tabs[i] == 'AHP Questionnaire':
-
-            custom_css = """
-            <style>
-                details {
-                    # background-color: #b3c3d9; /* Light grey background */
-                    background-color: white; /* Light grey background */
-                    border: 2px solid #4a4e69; /* Dark grey border */
-                    padding: 10px;
-                    border-radius: 10px; /* Rounded corners */
-                    margin: 10px 0;
-                }
-                summary {
-                    font-weight: bold;
-                }
-            </style>
-            """
-            st.markdown(custom_css, unsafe_allow_html=True)
-
-                
-            with st.expander('AHP Questionnaire(s)', expanded=True):
-
-                models_ahp = (assigned_forms[(assigned_forms['questionnaire'] == 'Delphi')].reset_index(drop = True))
-
-                models_ahp_grouped = models_ahp.groupby(['model_id', 'product']).agg(count = ('model_id', 'count'),
-                                                                             completed = ('completed', 'sum'),
-                                                                             reviewed = ('reviewed', 'sum')).reset_index()
-
-                models_ahp_list = list(set(models_ahp_grouped[models_ahp_grouped['count'] == models_ahp_grouped['reviewed']]['model_id']))
-
-                ahp_q_df = assigned_forms[(assigned_forms['model_id'].isin(models_ahp_list)) & (assigned_forms['questionnaire'] == 'AHP') & (assigned_forms['user'] == st.session_state.email) & (assigned_forms['completed'] == 0)].reset_index(drop = True)
-
-                if len(ahp_q_df) == 0:
-                    st.markdown(f"<div style='justifyContent: center;'><i>No pending questionnaire(s).</i></div>", unsafe_allow_html=True)
-                
-                for j in range(0, len(ahp_q_df)):
-
-                    ChangeButtonColour(f'{j+1}._{ahp_q_df['product'][j]}-{ahp_q_df['questionnaire'][j]}-{ahp_q_df['model_id'][j]}', 'black', 'transparent', '20px', False, f'{-40}px', '0px', '0px', 'left', 'underline', border = 'None')
-                    if st.button(f'{j+1}._{ahp_q_df['product'][j]}-{ahp_q_df['questionnaire'][j]}-{ahp_q_df['model_id'][j]}', key = f'{ahp_q_df['model_id'][j]}_{ahp_q_df['product'][j]}_ahp'):
-
-                        st.session_state['team'] = ahp_q_df['team'][j]
-                        st.session_state['product'] = ahp_q_df['product'][j]
-                        st.session_state['model_id'] = ahp_q_df['model_id'][j]
-                        vars_all = pd.read_excel('Delphi Verification Responses.xlsx')
-                        st.session_state['shortlisted_vars'] = vars_all.loc[(vars_all['Selected'] == True) & (vars_all['Model ID'] == st.session_state['model_id'])].reset_index(drop = True)
-                        
-
-                        st.session_state.page = 'ahp_questionnaire_description'
-                        st.session_state.need_rerun = True
-                        if st.session_state.need_rerun:
-                            st.session_state.need_rerun = False
-                            st.rerun()
+    main_cols = st.columns([1, 5, 1])
+    with main_cols[1]:
+        st.markdown(f"""
+        <div style="border-radius: 5px;">
+            <h2 style="text-align:left; color: black; font-weight: bold;">Responses</h2>
+        </div>
+        """, unsafe_allow_html=True)
         
+        user_sidebar()
     
-        elif sorted_role_tabs[i] == 'Delphi Questionnaire':
-            with st.expander('Delphi Questionnaire(s)', expanded=True):
-                
-                delphi_q_df = temp_assigned[(temp_assigned['questionnaire'] == 'Delphi') & (temp_assigned['reviewed'] == 0) & (temp_assigned['completed'] == 0) ].reset_index(drop = True)
-                
-                if len(delphi_q_df) == 0:
-                    st.markdown(f"<div style='justifyContent: center;'><i>No pending questionnaire(s).</i></div>", unsafe_allow_html=True)
-                else:
-                    for j in range(0, len(delphi_q_df)):
-                        # -40 - j*20
-                        ChangeButtonColour(f'{j+1}._{delphi_q_df['product'][j]}-{delphi_q_df['questionnaire'][j]}-{delphi_q_df['model_id'][j]}', 'black', 'transparent', '20px', False, f'{-40}px', '0px', '0px', 'left', 'underline', border = 'None')
-                        if st.button(f'{j+1}._{delphi_q_df['product'][j]}-{delphi_q_df['questionnaire'][j]}-{delphi_q_df['model_id'][j]}', key = f'{delphi_q_df['model_id'][j]}_{delphi_q_df['product'][j]}_bt'):
-                            
-                            st.session_state['team'] = delphi_q_df['team'][j]
-                            st.session_state['product'] = delphi_q_df['product'][j]
-                            st.session_state['model_id'] = delphi_q_df['model_id'][j]
-
-                            st.session_state.page = 'delphi_p1'
-                            st.session_state.need_rerun = True
-                            if st.session_state.need_rerun:
-                                st.session_state.need_rerun = False
-                                st.rerun()
-
-        else:
-            with st.expander('Delphi Verification(s)', expanded=True):
-                
-                models_ver = list(assigned_forms[(assigned_forms['reviewer'] == 'Yes') & (assigned_forms['reviewed'] == 0) & (assigned_forms['completed'] == 1) & (assigned_forms['user'] == st.session_state.email)]['model_id'])
-
-                ver_models_list = []
-                row_num = 0
-                for model in models_ver:
-                    delphi_v_df = assigned_forms[(assigned_forms['model_id'] == model) & (assigned_forms['questionnaire'] == 'Delphi')].reset_index(drop = True)
-                    if len(delphi_v_df[delphi_v_df['completed'] == 0]) == 0:
-                        ChangeButtonColour(f'{row_num+1}._{pd.unique(delphi_v_df['product'])[0]}-{pd.unique(delphi_v_df['questionnaire'])[0]} Verification-{pd.unique(delphi_v_df['model_id'])[0]}', 'black', 'transparent', '20px', False, f'{-40}px', '0px', '0px', 'left', 'underline', border = 'None')
-                        
-                        if st.button(f'{row_num+1}._{pd.unique(delphi_v_df['product'])[0]}-{pd.unique(delphi_v_df['questionnaire'])[0]} Verification-{pd.unique(delphi_v_df['model_id'])[0]}', key = f'{pd.unique(delphi_v_df['model_id'])[0]}_{pd.unique(delphi_v_df['product'])[0]}_ver'):
-                            
-                            st.session_state['delphi_ver_model'] = model 
-                            st.session_state['product'] = pd.unique(delphi_v_df['product'])[0]
-                            st.session_state['model_id'] = model
+        roles = pd.read_excel('Roles.xlsx')
+        assigned_forms = pd.read_excel('assign_forms.xlsx')
     
-                            st.session_state.page = 'delphi_ver'
-                            st.session_state.need_rerun = True
-                            if st.session_state.need_rerun:
-                                st.session_state.need_rerun = False
-                                st.rerun()
+        temp_roles = roles[roles['Email ID'] == st.session_state.email].reset_index(drop = True)
+        temp_quest = temp_roles[['Questionnaire', 'Reviewer']].drop_duplicates().reset_index(drop = True)
+        temp_quest['tabs'] = temp_quest['Questionnaire'] + '-' + temp_quest['Reviewer']
+    
+        temp_assigned = assigned_forms[assigned_forms['user'] == st.session_state.email].reset_index(drop = True)
+    
+        # st.write(temp_assigned)
+    
+        role_tabs = []
+        for i in range(0, len(temp_quest)):
+            if temp_quest['tabs'][i] == 'AHP-No':
+                role_tabs.append('AHP Questionnaire')
+            elif temp_quest['tabs'][i] == 'Delphi-No':
+                role_tabs.append('Delphi Questionnaire')
+            else:
+                role_tabs.append('Delphi Questionnaire')
+                role_tabs.append('Delphi Verification')
+        sorted_role_tabs = sorted(set(role_tabs))
+        # st.write(sorted_role_tabs)
+    
+        for i in range(0, len(sorted_role_tabs)):
+            if sorted_role_tabs[i] == 'AHP Questionnaire':
+    
+                custom_css = """
+                <style>
+                    details {
+                        # background-color: #b3c3d9; /* Light grey background */
+                        background-color: white; /* Light grey background */
+                        border: 2px solid #4a4e69; /* Dark grey border */
+                        padding: 10px;
+                        border-radius: 10px; /* Rounded corners */
+                        margin: 10px 0;
+                    }
+                    summary {
+                        font-weight: bold;
+                    }
+                </style>
+                """
+                st.markdown(custom_css, unsafe_allow_html=True)
+    
                     
-                        row_num += 1
-
-                if row_num == 0:
-                    st.markdown(f"<div style='justifyContent: center;'><i>No pending verification(s).</i></div>", unsafe_allow_html=True)
-
+                with st.expander('AHP Questionnaire(s)', expanded=True):
+    
+                    models_ahp = (assigned_forms[(assigned_forms['questionnaire'] == 'Delphi')].reset_index(drop = True))
+    
+                    models_ahp_grouped = models_ahp.groupby(['model_id', 'product']).agg(count = ('model_id', 'count'),
+                                                                                 completed = ('completed', 'sum'),
+                                                                                 reviewed = ('reviewed', 'sum')).reset_index()
+    
+                    models_ahp_list = list(set(models_ahp_grouped[models_ahp_grouped['count'] == models_ahp_grouped['reviewed']]['model_id']))
+    
+                    ahp_q_df = assigned_forms[(assigned_forms['model_id'].isin(models_ahp_list)) & (assigned_forms['questionnaire'] == 'AHP') & (assigned_forms['user'] == st.session_state.email) & (assigned_forms['completed'] == 0)].reset_index(drop = True)
+    
+                    if len(ahp_q_df) == 0:
+                        st.markdown(f"<div style='justifyContent: center;'><i>No pending questionnaire(s).</i></div>", unsafe_allow_html=True)
+                    
+                    for j in range(0, len(ahp_q_df)):
+    
+                        ChangeButtonColour(f'{j+1}._{ahp_q_df['product'][j]}-{ahp_q_df['questionnaire'][j]}-{ahp_q_df['model_id'][j]}', 'black', 'transparent', '20px', False, f'{-40}px', '0px', '0px', 'left', 'underline', border = 'None')
+                        if st.button(f'{j+1}._{ahp_q_df['product'][j]}-{ahp_q_df['questionnaire'][j]}-{ahp_q_df['model_id'][j]}', key = f'{ahp_q_df['model_id'][j]}_{ahp_q_df['product'][j]}_ahp'):
+    
+                            st.session_state['team'] = ahp_q_df['team'][j]
+                            st.session_state['product'] = ahp_q_df['product'][j]
+                            st.session_state['model_id'] = ahp_q_df['model_id'][j]
+                            vars_all = pd.read_excel('Delphi Verification Responses.xlsx')
+                            st.session_state['shortlisted_vars'] = vars_all.loc[(vars_all['Selected'] == True) & (vars_all['Model ID'] == st.session_state['model_id'])].reset_index(drop = True)
+                            
+    
+                            st.session_state.page = 'ahp_questionnaire_description'
+                            st.session_state.need_rerun = True
+                            if st.session_state.need_rerun:
+                                st.session_state.need_rerun = False
+                                st.rerun()
+            
+        
+            elif sorted_role_tabs[i] == 'Delphi Questionnaire':
+                with st.expander('Delphi Questionnaire(s)', expanded=True):
+                    
+                    delphi_q_df = temp_assigned[(temp_assigned['questionnaire'] == 'Delphi') & (temp_assigned['reviewed'] == 0) & (temp_assigned['completed'] == 0) ].reset_index(drop = True)
+                    
+                    if len(delphi_q_df) == 0:
+                        st.markdown(f"<div style='justifyContent: center;'><i>No pending questionnaire(s).</i></div>", unsafe_allow_html=True)
+                    else:
+                        for j in range(0, len(delphi_q_df)):
+                            # -40 - j*20
+                            ChangeButtonColour(f'{j+1}._{delphi_q_df['product'][j]}-{delphi_q_df['questionnaire'][j]}-{delphi_q_df['model_id'][j]}', 'black', 'transparent', '20px', False, f'{-40}px', '0px', '0px', 'left', 'underline', border = 'None')
+                            if st.button(f'{j+1}._{delphi_q_df['product'][j]}-{delphi_q_df['questionnaire'][j]}-{delphi_q_df['model_id'][j]}', key = f'{delphi_q_df['model_id'][j]}_{delphi_q_df['product'][j]}_bt'):
+                                
+                                st.session_state['team'] = delphi_q_df['team'][j]
+                                st.session_state['product'] = delphi_q_df['product'][j]
+                                st.session_state['model_id'] = delphi_q_df['model_id'][j]
+    
+                                st.session_state.page = 'delphi_p1'
+                                st.session_state.need_rerun = True
+                                if st.session_state.need_rerun:
+                                    st.session_state.need_rerun = False
+                                    st.rerun()
+    
+            else:
+                with st.expander('Delphi Verification(s)', expanded=True):
+                    
+                    models_ver = list(assigned_forms[(assigned_forms['reviewer'] == 'Yes') & (assigned_forms['reviewed'] == 0) & (assigned_forms['completed'] == 1) & (assigned_forms['user'] == st.session_state.email)]['model_id'])
+    
+                    ver_models_list = []
+                    row_num = 0
+                    for model in models_ver:
+                        delphi_v_df = assigned_forms[(assigned_forms['model_id'] == model) & (assigned_forms['questionnaire'] == 'Delphi')].reset_index(drop = True)
+                        if len(delphi_v_df[delphi_v_df['completed'] == 0]) == 0:
+                            ChangeButtonColour(f'{row_num+1}._{pd.unique(delphi_v_df['product'])[0]}-{pd.unique(delphi_v_df['questionnaire'])[0]} Verification-{pd.unique(delphi_v_df['model_id'])[0]}', 'black', 'transparent', '20px', False, f'{-40}px', '0px', '0px', 'left', 'underline', border = 'None')
+                            
+                            if st.button(f'{row_num+1}._{pd.unique(delphi_v_df['product'])[0]}-{pd.unique(delphi_v_df['questionnaire'])[0]} Verification-{pd.unique(delphi_v_df['model_id'])[0]}', key = f'{pd.unique(delphi_v_df['model_id'])[0]}_{pd.unique(delphi_v_df['product'])[0]}_ver'):
+                                
+                                st.session_state['delphi_ver_model'] = model 
+                                st.session_state['product'] = pd.unique(delphi_v_df['product'])[0]
+                                st.session_state['model_id'] = model
+        
+                                st.session_state.page = 'delphi_ver'
+                                st.session_state.need_rerun = True
+                                if st.session_state.need_rerun:
+                                    st.session_state.need_rerun = False
+                                    st.rerun()
+                        
+                            row_num += 1
+    
+                    if row_num == 0:
+                        st.markdown(f"<div style='justifyContent: center;'><i>No pending verification(s).</i></div>", unsafe_allow_html=True)
+    
 
 def gen_details():
     gen_vars = {}
