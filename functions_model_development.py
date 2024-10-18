@@ -1050,7 +1050,7 @@ def ahp_questionnaire(team, model_id, shortlisted_vars):
     """
     <style>
     .main .block-container {
-        max-width: 65%;
+        max-width: 80%;
         padding-left: 1%;
         padding-right: 1%;
     }
