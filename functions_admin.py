@@ -24,137 +24,139 @@ def initialize_states():
         st.session_state.team = None
 
 def login_screen():
-    css = """
-    <style>
-        .stApp {
-            background-color: #b3c3d9;
-        }
-        .css-18e3th9 {
-            background-color: #b3c3d9;
-        }
-    </style>
-    """
-     
-    st.markdown(css, unsafe_allow_html=True)
-    
-    st.markdown(f"""
-        <div style="border-radius: 5px; margin-top: 20px; margin-bottom: -100px;">
-            <h3 style="text-align:center; color: black; font-weight: bold;">Constrained Expert Judgement Modelling Tool</h3>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    main_cols = st.columns([1, 9, 1])
-    with main_cols[1]:
-        st.markdown(f"""
-        <div style="background-color: #F0F2F6; padding: 10px; border-radius: 10px; margin-top: 100px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-            <h2 style="text-align:left; font-size:25px ;color: black; padding-left: 65px; margin-top:20px; margin-bottom:250px;">Login</h2>
-        </div>
-        """, unsafe_allow_html=True)
+    login_cols = st.columns([1, 3, 1])
+    with login_cols[1]:    
+        css = """
+        <style>
+            .stApp {
+                background-color: #b3c3d9;
+            }
+            .css-18e3th9 {
+                background-color: #b3c3d9;
+            }
+        </style>
+        """
+         
+        st.markdown(css, unsafe_allow_html=True)
         
-        st.markdown("""
-            <style>
-                div[data-baseweb="input"] input {
-                    background-color: inherit !important;  /* Ensures background color is inherited */
-                    color: black !important;              /* Sets text color */
-                    border: none !important;              /* Removes borders */
-                    border-radius: 0px !important;        /* Removes border radius */
-                    outline: none !important;             /* Removes focus outline */
-                }
-            
-                div[data-baseweb="input"] input:focus {
-                    border: none !important;              /* Reinforces no border on focus */
-                    outline: none !important;             /* Reinforces no outline on focus */
-                }
-            
-                div[data-baseweb="input"] input::placeholder {
-                    color: #a6a6a6 !important;            /* Custom placeholder text color, force override */
-                }
-            
-                .stTextInput {
-                    margin-top: -280px;                   /* Adjust the negative margin as needed */
-                }
-            
-                .divider {
-                    height: 0.1px;
-                    background-color: black;
-                    margin-top: -230px;
-                }
-            </style>
+        st.markdown(f"""
+            <div style="border-radius: 5px; margin-top: 20px; margin-bottom: -100px;">
+                <h3 style="text-align:center; color: black; font-weight: bold;">Constrained Expert Judgement Modelling Tool</h3>
+            </div>
             """, unsafe_allow_html=True)
         
-        cols = st.columns([1, 6, 1])
-        with cols[1]:
-            email_id = st.text_input(label = 'Username/Email ID', placeholder = 'Enter Email ID', key='e_id')
-            st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
-            st.write('\n')
-            st.write('\n')
-            st.write('\n')
-        with cols[1]:
-            password = str(st.text_input(label = "Password", placeholder = 'Enter Password', type='password', key='pwd'))
-            st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
-            st.write('\n')
-            st.write('\n')
-            st.write('\n')
-        with cols[1]:
-            # st.markdown("""
-            # <style>
-            # div.stButton > button:first-child {
-            #     background-color: black; ##42638f; 
-            #     color: white; 
-            #     width: 100%;
-            #     border-radius: 100px;
+        main_cols = st.columns([1, 9, 1])
+        with main_cols[1]:
+            st.markdown(f"""
+            <div style="background-color: #F0F2F6; padding: 10px; border-radius: 10px; margin-top: 100px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <h2 style="text-align:left; font-size:25px ;color: black; padding-left: 65px; margin-top:20px; margin-bottom:250px;">Login</h2>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            st.markdown("""
+                <style>
+                    div[data-baseweb="input"] input {
+                        background-color: inherit !important;  /* Ensures background color is inherited */
+                        color: black !important;              /* Sets text color */
+                        border: none !important;              /* Removes borders */
+                        border-radius: 0px !important;        /* Removes border radius */
+                        outline: none !important;             /* Removes focus outline */
+                    }
                 
-            # }
-            # /* Add CSS for centering the button */
-            # div.stButton {
-            #     display: flex;
-            #     justify-content: center; /* Align button horizontally center */
-            #     margin-top: -280px; /* Optional: adds some space around the button */
-            # }
-            # </style>
-            # """, unsafe_allow_html=True)
-
-
-            ChangeButtonColour('Login', 'white', 'black', '20px', margin_top = '-300px', margin_bottom = '-300px')
-            if cols[1].button('Login', key='login'):
-            # if st.button('Login'):
-                if 'users' not in st.session_state:
-                    st.session_state.users = pd.read_excel('Users.xlsx')
+                    div[data-baseweb="input"] input:focus {
+                        border: none !important;              /* Reinforces no border on focus */
+                        outline: none !important;             /* Reinforces no outline on focus */
+                    }
+                
+                    div[data-baseweb="input"] input::placeholder {
+                        color: #a6a6a6 !important;            /* Custom placeholder text color, force override */
+                    }
+                
+                    .stTextInput {
+                        margin-top: -280px;                   /* Adjust the negative margin as needed */
+                    }
+                
+                    .divider {
+                        height: 0.1px;
+                        background-color: black;
+                        margin-top: -230px;
+                    }
+                </style>
+                """, unsafe_allow_html=True)
+            
+            cols = st.columns([1, 6, 1])
+            with cols[1]:
+                email_id = st.text_input(label = 'Username/Email ID', placeholder = 'Enter Email ID', key='e_id')
+                st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
+                st.write('\n')
+                st.write('\n')
+                st.write('\n')
+            with cols[1]:
+                password = str(st.text_input(label = "Password", placeholder = 'Enter Password', type='password', key='pwd'))
+                st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
+                st.write('\n')
+                st.write('\n')
+                st.write('\n')
+            with cols[1]:
+                # st.markdown("""
+                # <style>
+                # div.stButton > button:first-child {
+                #     background-color: black; ##42638f; 
+                #     color: white; 
+                #     width: 100%;
+                #     border-radius: 100px;
                     
-                st.session_state.users['password'] = st.session_state.users['password'].astype(str)
-                    
-                if (email_id in list(st.session_state.users['email'])) and (st.session_state.users[st.session_state.users['email'] == email_id]['password'].iloc[0] == password):
-
-                    st.session_state.user_name = f'{st.session_state.users[st.session_state.users['email'] == email_id]['f_name'].iloc[0]} {'' if pd.isna(st.session_state.users[st.session_state.users['email'] == email_id]['l_name'].iloc[0]) else st.session_state.users[st.session_state.users['email'] == email_id]['l_name'].iloc[0]}'
-                    
-                    st.session_state.email = email_id
-                    st.session_state.team = st.session_state.users[(st.session_state.users['email'] ==  email_id)]['team'].iloc[0]
-                    
-                    if st.session_state.users[st.session_state.users['email'] == email_id]['role'].iloc[0] == 'Admin':
-                        st.session_state.page = 'admin_home'
-                        st.session_state.need_rerun = True
-                        if st.session_state.need_rerun:
-                            st.session_state.need_rerun = False
-                            st.rerun()
-
-                    if st.session_state.users[st.session_state.users['email'] == email_id]['role'].iloc[0] == 'User':
-                        st.session_state.page = 'pending_page_user'
-                        st.session_state.need_rerun = True
-                        if st.session_state.need_rerun:
-                            st.session_state.need_rerun = False
-                            st.rerun()
-
-                    if st.session_state.users[st.session_state.users['email'] == email_id]['role'].iloc[0] == 'CR':
-                        st.session_state.page = 'cr_page'
-                        st.session_state.need_rerun = True
-                        if st.session_state.need_rerun:
-                            st.session_state.need_rerun = False
-                            st.rerun()
-
-                else:
-                    
-                    st.markdown(f"<div style='font-size: 11px; text-align: left;color: #ff8080;margin-top: -350px;'>Incorrect Username or Password.</div>", unsafe_allow_html=True)
-
+                # }
+                # /* Add CSS for centering the button */
+                # div.stButton {
+                #     display: flex;
+                #     justify-content: center; /* Align button horizontally center */
+                #     margin-top: -280px; /* Optional: adds some space around the button */
+                # }
+                # </style>
+                # """, unsafe_allow_html=True)
+    
+    
+                ChangeButtonColour('Login', 'white', 'black', '20px', margin_top = '-300px', margin_bottom = '-300px')
+                if cols[1].button('Login', key='login'):
+                # if st.button('Login'):
+                    if 'users' not in st.session_state:
+                        st.session_state.users = pd.read_excel('Users.xlsx')
+                        
+                    st.session_state.users['password'] = st.session_state.users['password'].astype(str)
+                        
+                    if (email_id in list(st.session_state.users['email'])) and (st.session_state.users[st.session_state.users['email'] == email_id]['password'].iloc[0] == password):
+    
+                        st.session_state.user_name = f'{st.session_state.users[st.session_state.users['email'] == email_id]['f_name'].iloc[0]} {'' if pd.isna(st.session_state.users[st.session_state.users['email'] == email_id]['l_name'].iloc[0]) else st.session_state.users[st.session_state.users['email'] == email_id]['l_name'].iloc[0]}'
+                        
+                        st.session_state.email = email_id
+                        st.session_state.team = st.session_state.users[(st.session_state.users['email'] ==  email_id)]['team'].iloc[0]
+                        
+                        if st.session_state.users[st.session_state.users['email'] == email_id]['role'].iloc[0] == 'Admin':
+                            st.session_state.page = 'admin_home'
+                            st.session_state.need_rerun = True
+                            if st.session_state.need_rerun:
+                                st.session_state.need_rerun = False
+                                st.rerun()
+    
+                        if st.session_state.users[st.session_state.users['email'] == email_id]['role'].iloc[0] == 'User':
+                            st.session_state.page = 'pending_page_user'
+                            st.session_state.need_rerun = True
+                            if st.session_state.need_rerun:
+                                st.session_state.need_rerun = False
+                                st.rerun()
+    
+                        if st.session_state.users[st.session_state.users['email'] == email_id]['role'].iloc[0] == 'CR':
+                            st.session_state.page = 'cr_page'
+                            st.session_state.need_rerun = True
+                            if st.session_state.need_rerun:
+                                st.session_state.need_rerun = False
+                                st.rerun()
+    
+                    else:
+                        
+                        st.markdown(f"<div style='font-size: 11px; text-align: left;color: #ff8080;margin-top: -350px;'>Incorrect Username or Password.</div>", unsafe_allow_html=True)
+    
 
 def admin_sidebar():
 
