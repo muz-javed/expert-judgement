@@ -44,7 +44,7 @@ def login_screen():
         </div>
         """, unsafe_allow_html=True)
     
-    main_cols = st.columns([1, 6, 1])
+    main_cols = st.columns([1, 2, 1])
     with main_cols[1]:
         st.markdown(f"""
         <div style="background-color: #F0F2F6; padding: 10px; border-radius: 10px; margin-top: 100px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
