@@ -1085,7 +1085,7 @@ def ahp_questionnaire(team, model_id, shortlisted_vars):
         """, unsafe_allow_html=True)
     
     st.markdown(f'<p class="big-font">AHP Questionnaire for {team}</p>', unsafe_allow_html=True)
-    st.markdown(f'<p class="big-font">Product: {st.session_state.product}</p>', unsafe_allow_html=True)
+    st.markdown(f'<p class="big-font" style="margin-top:-30px;">Product: {st.session_state.product}</p>', unsafe_allow_html=True)
 
     # st.image('AHP Process.png')
     
