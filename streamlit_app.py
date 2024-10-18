@@ -6,12 +6,21 @@ from functions_model_development import delphi_questionnaire_p1, delphi_question
 
 from functions_admin import ChangeButtonColour
 
-hide_github_icon = """
-#GithubIcon {
-  visibility: hidden;
+st.markdown("""
+<style>
+.st-emotion-cache-1wbqy5l {
+    display: flex;
+    gap: 0.5rem;
+    -webkit-box-align: center;
+    align-items: center;
+    line-height: 0.9rem;
+    visibility: hidden;
 }
-"""
-st.markdown(hide_github_icon, unsafe_allow_html=True)
+</style>
+""", unsafe_allow_html=True)
+
+
+# st.markdown(hide_github_icon, unsafe_allow_html=True)
 
 def main():
 
