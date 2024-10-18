@@ -6,6 +6,8 @@ from functions_model_development import delphi_questionnaire_p1, delphi_question
 
 from functions_admin import ChangeButtonColour
 
+st.set_page_config(layout="wide")
+
 st.markdown("""
 <style>
 .st-emotion-cache-1wbqy5l {
