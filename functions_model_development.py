@@ -1066,7 +1066,7 @@ def ahp_questionnaire(team, model_id, shortlisted_vars):
         .big-font {
             font-size:25px !important;
             font-weight: bold;
-            margin-top: -20px;
+            margin-top: -40px;
             padding: 0px;
         }
         .small-font {
