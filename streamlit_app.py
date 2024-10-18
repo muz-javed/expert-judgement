@@ -83,7 +83,7 @@ def main():
         </style>
         """, unsafe_allow_html=True)
 
-        cols = st.columns([1, 5, 1])
+        cols = st.columns([1, 7, 1])
         with cols[1]:
             # cols = st.columns([0.01, 12])
             # with cols[1]:
