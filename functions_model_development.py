@@ -1083,71 +1083,74 @@ def ahp_questionnaire(team, model_id, shortlisted_vars):
         }
         </style>
         """, unsafe_allow_html=True)
+
+    main_cols = st.columns([1, 5, 1])
+
+    with main_cols[1]:
+        st.markdown(f'<p class="big-font">AHP Questionnaire for {team}</p>', unsafe_allow_html=True)
+        st.markdown(f'<p class="big-font" style="margin-top:-30px;">Product: {st.session_state.product}</p>', unsafe_allow_html=True)
     
-    st.markdown(f'<p class="big-font">AHP Questionnaire for {team}</p>', unsafe_allow_html=True)
-    st.markdown(f'<p class="big-font" style="margin-top:-30px;">Product: {st.session_state.product}</p>', unsafe_allow_html=True)
-
-    # st.image('AHP Process.png')
-    
-    color_classes = ['#40597d', '#5e85b3', '#429bab', '#335e80', '#5f7c8f', '#41779c', '#3b7275', '#45567a', '#557e91']
-    
-
-
-    with st.expander('Application Variables'):
-        variables = list(pd.unique(shortlisted_vars.loc[~shortlisted_vars['Category'].isin(['Behavioral Variables', 'Adjustments / Downgrade Factors', 'Early Warning Indicators'])]['Category']))
-        if len(variables) != 0:
-            # st.markdown(f'<p class="small-font">Application Variables</p>', unsafe_allow_html=True)
-            # st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
-            
-            ahp_questionnaire_calcs('L2 - Customer Specific Categories', None, None, variables, '#04695b', 'cs', team, 'L2', model_id)
-            st.write('\n')
-            
-            cat_count = 0
-            for cat in pd.unique(variables):
-                if list(pd.unique(shortlisted_vars[shortlisted_vars['Category'] == cat]['Sub-category'])) == [cat]:
-                    temp_df = pd.DataFrame([model_id, team, 'L3', cat, cat, None, 1]).T
-                    temp_df.columns = st.session_state[f'ahp_weights_{team}'].columns
-                    st.session_state[f'ahp_weights_{team}'] = pd.concat([st.session_state[f'ahp_weights_{team}'], temp_df]).reset_index(drop = True)
-                    
-                    ahp_questionnaire_calcs(f"L3 - {cat}", cat, cat, pd.unique(shortlisted_vars[(shortlisted_vars['Category'] == cat)]['Variable Name']), color_classes[cat_count], cat_count, team, 'L4', model_id)
-            
-                else: 
-                    ahp_questionnaire_calcs(f"L3 - {cat}", cat, None, pd.unique(shortlisted_vars[(shortlisted_vars['Category'] == cat)]['Sub-category']), color_classes[cat_count], cat_count, team, 'L3', model_id)
-            
-                    for sub_cat in pd.unique(shortlisted_vars[shortlisted_vars['Category'] == cat]['Sub-category']):
-                        temp_vars = pd.unique(shortlisted_vars[(shortlisted_vars['Category'] == cat) & (shortlisted_vars['Sub-category'] == sub_cat)]['Variable Name']) 
-                        ahp_questionnaire_calcs(f"L4 - {cat}: {sub_cat}", cat, sub_cat, temp_vars, color_classes[cat_count], cat_count, team, 'L4', model_id)
-                
-                st.write('\n')
-                cat_count += 1
-
-
-
-    with st.expander('Behavioral Variables'):
-        # st.markdown(f'<p class="small-font">Behavioral Variables</p>', unsafe_allow_html=True)
-        # st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
+        # st.image('AHP Process.png')
         
-        bv_vars = shortlisted_vars.loc[shortlisted_vars['Category'] == 'Behavioral Variables']['Variable Name']
-        ahp_questionnaire_calcs('L4 - Variables', 'Behavioral Variables', 'Behavioral Variables', bv_vars, '#4354ab', 'bv', team, 'L4', model_id)
-        st.write('\n')
-
-    with st.expander('Adjustments / Downgrade Factors'):
-        if len(shortlisted_vars.loc[shortlisted_vars['Category'] == 'Adjustments / Downgrade Factors']) != 0:
-            # st.markdown(f'<p class="small-font">Adjustments / Downgrade Factors</p>', unsafe_allow_html=True)
-            # st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
-            af_vars = shortlisted_vars.loc[shortlisted_vars['Category'] == 'Adjustments / Downgrade Factors']['Variable Name']
-            ahp_questionnaire_calcs('L4 - Variables', 'Adjustments / Downgrade Factors', 'Adjustments / Downgrade Factors', af_vars, '#a9ab32', 'af', team, 'L4', model_id)
-            st.write('\n')
-
-    with st.expander('Early Warning Indicators'):
-        if len(shortlisted_vars.loc[shortlisted_vars['Category'] == 'Early Warning Indicators']) != 0:
-            # st.markdown(f'<p class="small-font">Early Warning Indicators</p>', unsafe_allow_html=True)
-            # st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
-            ewi_vars = shortlisted_vars.loc[shortlisted_vars['Category'] == 'Early Warning Indicators']['Variable Name']
-            ahp_questionnaire_calcs('L4 - Variables', 'Early Warning Indicators', 'Early Warning Indicators', ewi_vars, '#32ab7e', 'ewi', team, 'L4', model_id)
-            st.write('\n')
-
+        color_classes = ['#40597d', '#5e85b3', '#429bab', '#335e80', '#5f7c8f', '#41779c', '#3b7275', '#45567a', '#557e91']
+        
     
+    
+        with st.expander('Application Variables'):
+            variables = list(pd.unique(shortlisted_vars.loc[~shortlisted_vars['Category'].isin(['Behavioral Variables', 'Adjustments / Downgrade Factors', 'Early Warning Indicators'])]['Category']))
+            if len(variables) != 0:
+                # st.markdown(f'<p class="small-font">Application Variables</p>', unsafe_allow_html=True)
+                # st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
+                
+                ahp_questionnaire_calcs('L2 - Customer Specific Categories', None, None, variables, '#04695b', 'cs', team, 'L2', model_id)
+                st.write('\n')
+                
+                cat_count = 0
+                for cat in pd.unique(variables):
+                    if list(pd.unique(shortlisted_vars[shortlisted_vars['Category'] == cat]['Sub-category'])) == [cat]:
+                        temp_df = pd.DataFrame([model_id, team, 'L3', cat, cat, None, 1]).T
+                        temp_df.columns = st.session_state[f'ahp_weights_{team}'].columns
+                        st.session_state[f'ahp_weights_{team}'] = pd.concat([st.session_state[f'ahp_weights_{team}'], temp_df]).reset_index(drop = True)
+                        
+                        ahp_questionnaire_calcs(f"L3 - {cat}", cat, cat, pd.unique(shortlisted_vars[(shortlisted_vars['Category'] == cat)]['Variable Name']), color_classes[cat_count], cat_count, team, 'L4', model_id)
+                
+                    else: 
+                        ahp_questionnaire_calcs(f"L3 - {cat}", cat, None, pd.unique(shortlisted_vars[(shortlisted_vars['Category'] == cat)]['Sub-category']), color_classes[cat_count], cat_count, team, 'L3', model_id)
+                
+                        for sub_cat in pd.unique(shortlisted_vars[shortlisted_vars['Category'] == cat]['Sub-category']):
+                            temp_vars = pd.unique(shortlisted_vars[(shortlisted_vars['Category'] == cat) & (shortlisted_vars['Sub-category'] == sub_cat)]['Variable Name']) 
+                            ahp_questionnaire_calcs(f"L4 - {cat}: {sub_cat}", cat, sub_cat, temp_vars, color_classes[cat_count], cat_count, team, 'L4', model_id)
+                    
+                    st.write('\n')
+                    cat_count += 1
+    
+    
+    
+        with st.expander('Behavioral Variables'):
+            # st.markdown(f'<p class="small-font">Behavioral Variables</p>', unsafe_allow_html=True)
+            # st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
+            
+            bv_vars = shortlisted_vars.loc[shortlisted_vars['Category'] == 'Behavioral Variables']['Variable Name']
+            ahp_questionnaire_calcs('L4 - Variables', 'Behavioral Variables', 'Behavioral Variables', bv_vars, '#4354ab', 'bv', team, 'L4', model_id)
+            st.write('\n')
+    
+        with st.expander('Adjustments / Downgrade Factors'):
+            if len(shortlisted_vars.loc[shortlisted_vars['Category'] == 'Adjustments / Downgrade Factors']) != 0:
+                # st.markdown(f'<p class="small-font">Adjustments / Downgrade Factors</p>', unsafe_allow_html=True)
+                # st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
+                af_vars = shortlisted_vars.loc[shortlisted_vars['Category'] == 'Adjustments / Downgrade Factors']['Variable Name']
+                ahp_questionnaire_calcs('L4 - Variables', 'Adjustments / Downgrade Factors', 'Adjustments / Downgrade Factors', af_vars, '#a9ab32', 'af', team, 'L4', model_id)
+                st.write('\n')
+    
+        with st.expander('Early Warning Indicators'):
+            if len(shortlisted_vars.loc[shortlisted_vars['Category'] == 'Early Warning Indicators']) != 0:
+                # st.markdown(f'<p class="small-font">Early Warning Indicators</p>', unsafe_allow_html=True)
+                # st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
+                ewi_vars = shortlisted_vars.loc[shortlisted_vars['Category'] == 'Early Warning Indicators']['Variable Name']
+                ahp_questionnaire_calcs('L4 - Variables', 'Early Warning Indicators', 'Early Warning Indicators', ewi_vars, '#32ab7e', 'ewi', team, 'L4', model_id)
+                st.write('\n')
+    
+        
 
     
 
