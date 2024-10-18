@@ -1580,59 +1580,36 @@ def show_ahp_weight(team, df):
     """,
     unsafe_allow_html=True,
     )
-     
-    st.markdown(f'<p class="big-font">Verify Weights</p>', unsafe_allow_html=True)
 
-    weights_final_df, l2_weights, l3_weights, av_l4_weights, bv_l4_weights, af_l4_weights, ewi_l4_weights = transfrom_and_load_weights(df, team)
+    main_cols = st.columns([1, 5, 1])
 
-    st.markdown(f'<p class="small-font">Application Variables</p>', unsafe_allow_html=True)
-    st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
+    with main_cols[1]:
+        st.markdown(f'<p class="big-font">Verify Weights</p>', unsafe_allow_html=True)
     
-    weights_display(l2_weights, 'L2 Weights', '#5e85b3', [1, 1, 1, 1])
-    weights_display(l3_weights, 'L3 Weights', '#5e85b3', [1, 1, 1, 1, 1])
-    weights_display(av_l4_weights, 'L4 Weights', '#5e85b3', [1, 1, 2, 2, 2, 1])
-    weights_display(weights_final_df, 'Final Weights', '#5e85b3', [1, 1, 2, 1, 2, 1, 2, 1, 1])
-
-    weights_final_df = pd.concat([weights_final_df, bv_l4_weights, af_l4_weights, ewi_l4_weights]).reset_index(drop = True)
+        weights_final_df, l2_weights, l3_weights, av_l4_weights, bv_l4_weights, af_l4_weights, ewi_l4_weights = transfrom_and_load_weights(df, team)
     
-    st.markdown(f'<p class="small-font">Behavioral Variables</p>', unsafe_allow_html=True)
-    # st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
-    weights_display(bv_l4_weights[['Model ID', 'Team', 'Variable Name', 'L4 Weight']], 'L4 Weights', '#5e85b3', [1, 1, 1, 1])
-    
-    st.markdown(f'<p class="small-font">Adjustments / Downgrade Factors</p>', unsafe_allow_html=True)
-    # st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
-    weights_display(af_l4_weights[['Model ID', 'Team', 'Variable Name', 'L4 Weight']], 'L4 Weights', '#5e85b3', [1, 1, 1, 1])
-    
-    st.markdown(f'<div class="small-font">Early Warning Indicators</div>', unsafe_allow_html=True)
-    # st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
-    weights_display(ewi_l4_weights[['Model ID', 'Team', 'Variable Name', 'L4 Weight']], 'L4 Weights', '#5e85b3', [1, 1, 1, 1])
-    
-    # st.markdown(f'<p class="small-font">Application Variables</p>', unsafe_allow_html=True)
-    # st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
-    
-    # weights_display(l2_weights, 'L2 Weights', '#965649', [1, 1, 1, 1])
-    # weights_display(l3_weights, 'L3 Weights', '#968f4a', [1, 1, 1, 1, 1])
-    # weights_display(av_l4_weights, 'L4 Weights', '#679649', [1, 1, 2, 2, 2, 1])
-    # weights_display(weights_final_df, 'Final Weights', '#499657', [1, 1, 2, 1, 2, 1, 2, 1, 1])
-
-    # weights_final_df = pd.concat([weights_final_df, bv_l4_weights, af_l4_weights, ewi_l4_weights]).reset_index(drop = True)
-    
-    # st.markdown("""
-    # <style>
-    # # div.stButton > button:first-child {
-    # #     width: 250px; /* Set the width of the button */
-    # #     background-color: #2E2E38; /* Change background to blue */
-    # #     color: white; /* Change text color to white */
+        st.markdown(f'<p class="small-font">Application Variables</p>', unsafe_allow_html=True)
+        st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
         
-    # # }
-    # /* Add CSS for centering the button */
-    # div.stButton {
-    #     display: flex;
-    #     justify-content: center; /* Align button horizontally center */
-    #     # margin: 10px 0; /* Optional: adds some space around the button */
-    # }
-    # </style>
-    # """, unsafe_allow_html=True)
+        weights_display(l2_weights, 'L2 Weights', '#5e85b3', [1, 1, 1, 1])
+        weights_display(l3_weights, 'L3 Weights', '#5e85b3', [1, 1, 1, 1, 1])
+        weights_display(av_l4_weights, 'L4 Weights', '#5e85b3', [1, 1, 2, 2, 2, 1])
+        weights_display(weights_final_df, 'Final Weights', '#5e85b3', [1, 1, 2, 1, 2, 1, 2, 1, 1])
+    
+        weights_final_df = pd.concat([weights_final_df, bv_l4_weights, af_l4_weights, ewi_l4_weights]).reset_index(drop = True)
+        
+        st.markdown(f'<p class="small-font">Behavioral Variables</p>', unsafe_allow_html=True)
+        # st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
+        weights_display(bv_l4_weights[['Model ID', 'Team', 'Variable Name', 'L4 Weight']], 'L4 Weights', '#5e85b3', [1, 1, 1, 1])
+        
+        st.markdown(f'<p class="small-font">Adjustments / Downgrade Factors</p>', unsafe_allow_html=True)
+        # st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
+        weights_display(af_l4_weights[['Model ID', 'Team', 'Variable Name', 'L4 Weight']], 'L4 Weights', '#5e85b3', [1, 1, 1, 1])
+        
+        st.markdown(f'<div class="small-font">Early Warning Indicators</div>', unsafe_allow_html=True)
+        # st.markdown(f"<div class='boldhr'</div>", unsafe_allow_html=True) 
+        weights_display(ewi_l4_weights[['Model ID', 'Team', 'Variable Name', 'L4 Weight']], 'L4 Weights', '#5e85b3', [1, 1, 1, 1])
+        
     
     if f'submit_ahp_weight_{team}' not in st.session_state:
         st.session_state[f'submit_ahp_weight_{team}'] = False
