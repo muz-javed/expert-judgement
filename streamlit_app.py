@@ -83,26 +83,28 @@ def main():
         </style>
         """, unsafe_allow_html=True)
 
-        # cols = st.columns([0.01, 12])
-        # with cols[1]:
-        st.markdown(f'<p class="big-font" style = "margin-top: -40px">Hierarchal Tree for Variables</p>', unsafe_allow_html=True)
-        # st.markdown(f'<p class="big-font">Product: {st.session_state.product}</p>', unsafe_allow_html=True)
-        st.image('AHP Process.png')
-
-        cols_button = st.columns(4)
-        ChangeButtonColour('Back', 'black', '#b3c3d9', '20px', margin_top = '50px')
-        if cols_button[1].button('Back', key='desc_page_back'):
-            st.session_state['page'] = 'pending_page_user'
-            st.session_state.need_rerun = True
-            st.session_state.need_rerun = False
-            st.rerun()
-
-        ChangeButtonColour('Start Questionnaire', 'black', '#b3c3d9', '20px', margin_top = '50px')
-        if cols_button[2].button('Start Questionnaire', key='desc_page_next'):
-            st.session_state['page'] = 'ahp_questionnaire'
-            st.session_state.need_rerun = True
-            st.session_state.need_rerun = False
-            st.rerun()
+        cols = st.columns(1, 5, 1)
+        with cols[1]:
+            # cols = st.columns([0.01, 12])
+            # with cols[1]:
+            st.markdown(f'<p class="big-font" style = "margin-top: -40px">Hierarchal Tree for Variables</p>', unsafe_allow_html=True)
+            # st.markdown(f'<p class="big-font">Product: {st.session_state.product}</p>', unsafe_allow_html=True)
+            st.image('AHP Process.png')
+    
+            cols_button = st.columns(4)
+            ChangeButtonColour('Back', 'black', '#b3c3d9', '20px', margin_top = '50px')
+            if cols_button[1].button('Back', key='desc_page_back'):
+                st.session_state['page'] = 'pending_page_user'
+                st.session_state.need_rerun = True
+                st.session_state.need_rerun = False
+                st.rerun()
+    
+            ChangeButtonColour('Start Questionnaire', 'black', '#b3c3d9', '20px', margin_top = '50px')
+            if cols_button[2].button('Start Questionnaire', key='desc_page_next'):
+                st.session_state['page'] = 'ahp_questionnaire'
+                st.session_state.need_rerun = True
+                st.session_state.need_rerun = False
+                st.rerun()
 
 
     if st.session_state.page == 'ahp_questionnaire_weights':
